@@ -24,11 +24,11 @@ const GlobalHeaderRight = (props) => {
     <div className={className}>
       <HeaderSearch
         className={`${styles.action} ${styles.search}`}
-        placeholder="站内搜索"
+
         defaultValue="umi ui"
         options={[
           {
-            label: <a href="https://umijs.org/zh/guide/umi-ui.html">umi ui</a>,
+            label: <a href="https://umijs.org/zh/guide/umi-ui.html">Tìm kiếm gì đó?</a>,
             value: 'umi ui',
           },
           {
@@ -47,7 +47,7 @@ const GlobalHeaderRight = (props) => {
         //   //console.log('input', value);
         // }}
       />
-      <Tooltip title="使用文档">
+      {/* <Tooltip title="使用文档">
         <a
           style={{
             color: 'inherit',
@@ -59,7 +59,7 @@ const GlobalHeaderRight = (props) => {
         >
           <QuestionCircleOutlined />
         </a>
-      </Tooltip>
+      </Tooltip> */}
       <NoticeIconView />
       <Avatar menu />
       {REACT_APP_ENV && (
