@@ -116,28 +116,29 @@ export default defineConfig({
             {
               path: '/list',
               icon: 'table',
-              name: 'Quản lý sản phẩm',
+              name: 'Quản lý',
               routes: [
                 {
                   path: '/list/search',
-                  name: 'Danh sách sản phẩm',
+                  name: 'Danh sách quản lý',
                   component: './list/search',
                   routes: [
                     {
                       path: '/list/search',
                       redirect: '/list/search/projects',
                     },
-                    // {
-                    //   name: 'articles',
-                    //   icon: 'smile',
-                    //   path: '/list/search/articles',
-                    //   component: './list/search/articles',
-                    // },
+
                     {
                       name: 'Đồ ăn',
                       icon: 'smile',
                       path: '/list/search/projects',
                       component: './list/search/projects',
+                    },
+                    {
+                      name: 'Khách hàng',
+                      icon: 'smile',
+                      path: '/list/search/articles',
+                      component: './list/search/articles',
                     },
                     // {
                     //   name: 'applications',
