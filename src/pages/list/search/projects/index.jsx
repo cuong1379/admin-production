@@ -1,5 +1,19 @@
-import { Card, Col, Form, List, Row, Select, Typography, Button ,Modal ,InputNumber, Input ,Popconfirm, message } from 'antd';
-import React, { useEffect,useState  } from 'react';
+import {
+  Card,
+  Col,
+  Form,
+  List,
+  Row,
+  Select,
+  Typography,
+  Button,
+  Modal,
+  InputNumber,
+  Input,
+  Popconfirm,
+  message,
+} from 'antd';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
 import moment from 'moment';
 import AvatarList from './components/AvatarList';
@@ -8,20 +22,17 @@ import TagSelect from './components/TagSelect';
 import styles from './style.less';
 const { Option } = Select;
 const FormItem = Form.Item;
-import axios from 'axios'
+import axios from 'axios';
 const { Paragraph } = Typography;
 
 const getKey = (id, index) => `${id}-${index}`;
 
-
-
 const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }) => {
-
   const [isModalVisibleAdd, setIsModalVisibleAdd] = useState(false);
   const [isModalVisibleUpdate, setIsModalVisibleUpdate] = useState(false);
 
-  const [currentId, setCurrentId] = useState()
-  const [form] = Form.useForm()
+  const [currentId, setCurrentId] = useState();
+  const [form] = Form.useForm();
 
   useEffect(() => {
     dispatch({
@@ -30,7 +41,6 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
         count: 8,
       },
     });
-
   }, []);
 
   const cardList = list && (
@@ -49,19 +59,19 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
       dataSource={list}
       renderItem={(item) => (
         <List.Item>
-          <Card className={styles.card} hoverable cover={<img alt={item.name} src={item.thumbnail}  />}>
-            <Card.Meta  
+          <Card
+            className={styles.card}
+            hoverable
+            cover={<img alt={item.name} src={item.thumbnail} />}
+          >
+            <Card.Meta
               title={
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                      <a >
-                        {item.name}
-                      </a>
-                      <a onClick={()=> handleUpdateProduct(item._id)} style={{color: 'red'}}>
-                        Chi tiết
-                      </a>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <a>{item.name}</a>
+                  <a onClick={() => handleUpdateProduct(item._id)} style={{ color: 'red' }}>
+                    Chi tiết
+                  </a>
                 </div>
-                    
-        
               }
               description={
                 <Paragraph
@@ -75,20 +85,24 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
               }
             />
             <Popconfirm
-                title="Xác nhận xóa sản phẩm này?"
-                onConfirm={() => confirm(item._id)}
-                onCancel={cancel}
-                okText="Xóa"
-                cancelText="Hủy"
-                >
-                <Button type="primary" danger >
-                  Delete
-                </Button>
+              title="Xác nhận xóa sản phẩm này?"
+              onConfirm={() => confirm(item._id)}
+              onCancel={cancel}
+              okText="Xóa"
+              cancelText="Hủy"
+            >
+              <Button type="primary" danger>
+                Delete
+              </Button>
             </Popconfirm>
 
-            <div className={styles.cardItemContent} style={{justifyContent: 'space-between'}}>
-              <div style={{fontSize: '20px', fontWeight: '15px'}}>Giá: {new Intl.NumberFormat().format(item.price)} VNĐ</div>
-              <div style={{ fontWeight: '15px'}}>Số lượng: {new Intl.NumberFormat().format(item.quantity)}</div>
+            <div className={styles.cardItemContent} style={{ justifyContent: 'space-between' }}>
+              <div style={{ fontSize: '20px', fontWeight: '15px' }}>
+                Giá: {new Intl.NumberFormat().format(item.price)} VNĐ
+              </div>
+              <div style={{ fontWeight: '15px' }}>
+                Số lượng: {new Intl.NumberFormat().format(item.quantity)}
+              </div>
               {/* <div className={styles.avatarList}>
                 <AvatarList size="small">
                   {item.members.map((member, i) => (
@@ -127,17 +141,17 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
   };
 
   const handleAddProduct = () => {
-    setIsModalVisibleAdd(true)
-  }
+    setIsModalVisibleAdd(true);
+  };
 
   const handleCancelAdd = () => {
     setIsModalVisibleAdd(false);
   };
 
   const handleUpdateProduct = (id) => {
-    setIsModalVisibleUpdate(true)
-    setCurrentId(id)
-  }
+    setIsModalVisibleUpdate(true);
+    setCurrentId(id);
+  };
 
   const handleCancelUpdate = () => {
     setIsModalVisibleUpdate(false);
@@ -158,7 +172,7 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
     await dispatch({
       type: 'listAndsearchAndprojects/createProduct',
       payload: {
-       values
+        values,
       },
     });
     setIsModalVisibleAdd(false);
@@ -174,8 +188,8 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
     await dispatch({
       type: 'listAndsearchAndprojects/updateProduct',
       payload: {
-       values,
-       currentId
+        values,
+        currentId,
       },
     });
     setIsModalVisibleUpdate(false);
@@ -185,31 +199,28 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
         count: 8,
       },
     });
-    form.resetFields()
-  }
+    form.resetFields();
+  };
 
   const cancel = (e) => {
     message.error('Bạn chưa xóa');
-}
+  };
 
-const confirm = async (id) => {
-  await dispatch({
-    type: 'listAndsearchAndprojects/deleteProduct',
-    payload: {
-     id
-    },
-  });
+  const confirm = async (id) => {
+    await dispatch({
+      type: 'listAndsearchAndprojects/deleteProduct',
+      payload: {
+        id,
+      },
+    });
 
-  dispatch({
-    type: 'listAndsearchAndprojects/fetch',
-    payload: {
-      count: 8,
-    },
-  });
-
-}
-
-
+    dispatch({
+      type: 'listAndsearchAndprojects/fetch',
+      payload: {
+        count: 8,
+      },
+    });
+  };
 
   return (
     <div className={styles.coverCardList}>
@@ -239,7 +250,6 @@ const confirm = async (id) => {
                 <TagSelect.Option value="cat3">Đồ ăn nhanh</TagSelect.Option>
                 <TagSelect.Option value="cat4">Bia</TagSelect.Option>
                 <TagSelect.Option value="cat5">Đặc sản</TagSelect.Option>
-
               </TagSelect>
             </FormItem>
           </StandardFormRow>
@@ -274,26 +284,45 @@ const confirm = async (id) => {
                 </FormItem>
               </Col>
               <Col lg={8} md={4} sm={4} xs={24}>
-                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                  <Button type='primary' danger onClick={handleAddProduct}>Thêm mới</Button>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button type="primary" danger onClick={handleAddProduct}>
+                    Thêm mới
+                  </Button>
                 </div>
-
               </Col>
             </Row>
           </StandardFormRow>
         </Form>
       </Card>
       <div className={styles.cardList}>{cardList}</div>
-      <Modal title="Thêm sản phẩm" visible={isModalVisibleAdd} onCancel={handleCancelAdd} footer={null}>
-        <Form {...layout} name="nest-messages" onFinish={onFinishAdd} validateMessages={validateMessages}>
+      <Modal
+        title="Thêm sản phẩm"
+        visible={isModalVisibleAdd}
+        onCancel={handleCancelAdd}
+        footer={null}
+      >
+        <Form
+          {...layout}
+          name="nest-messages"
+          onFinish={onFinishAdd}
+          validateMessages={validateMessages}
+        >
           <Form.Item name={['name']} label="Tên sản phẩm" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          
-          <Form.Item name={['quantity']} label="Số lượng" rules={[{ type: 'number', min: 0, max: 1000 }]}>
+
+          <Form.Item
+            name={['quantity']}
+            label="Số lượng"
+            rules={[{ type: 'number', min: 0, max: 1000 }]}
+          >
             <InputNumber />
           </Form.Item>
-          <Form.Item name={['price']} label="Giá tiền" rules={[{ type: 'number', min: 0, max: 100000000 }]}>
+          <Form.Item
+            name={['price']}
+            label="Giá tiền"
+            rules={[{ type: 'number', min: 0, max: 100000000 }]}
+          >
             <InputNumber />
           </Form.Item>
           <Form.Item name={['thumbnail']} label="Hình ảnh" rules={[{ required: true }]}>
@@ -309,17 +338,36 @@ const confirm = async (id) => {
           </Form.Item>
         </Form>
       </Modal>
-        
-      <Modal title="Cập nhật sản phẩm" visible={isModalVisibleUpdate} onCancel={handleCancelUpdate} footer={null}>
-        <Form form={form} {...layout} name="nest-messages" onFinish={onFinishUpdate} validateMessages={validateMessages}>
+
+      <Modal
+        title="Cập nhật sản phẩm"
+        visible={isModalVisibleUpdate}
+        onCancel={handleCancelUpdate}
+        footer={null}
+      >
+        <Form
+          form={form}
+          {...layout}
+          name="nest-messages"
+          onFinish={onFinishUpdate}
+          validateMessages={validateMessages}
+        >
           <Form.Item name={['name']} label="Tên sản phẩm" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          
-          <Form.Item name={['quantity']} label="Số lượng" rules={[{ type: 'number', min: 0, max: 1000 }]}>
+
+          <Form.Item
+            name={['quantity']}
+            label="Số lượng"
+            rules={[{ type: 'number', min: 0, max: 1000 }]}
+          >
             <InputNumber />
           </Form.Item>
-          <Form.Item name={['price']} label="Giá tiền" rules={[{ type: 'number', min: 0, max: 100000000 }]}>
+          <Form.Item
+            name={['price']}
+            label="Giá tiền"
+            rules={[{ type: 'number', min: 0, max: 100000000 }]}
+          >
             <InputNumber />
           </Form.Item>
           <Form.Item name={['thumbnail']} label="Hình ảnh" rules={[{ required: true }]}>

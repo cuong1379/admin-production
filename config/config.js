@@ -84,35 +84,7 @@ export default defineConfig({
                 },
               ],
             },
-            // {
-            //   path: '/form',
-            //   icon: 'form',
-            //   name: 'form',
-            //   routes: [
-            //     {
-            //       path: '/',
-            //       redirect: '/form/basic-form',
-            //     },
-            //     {
-            //       name: 'basic-form',
-            //       icon: 'smile',
-            //       path: '/form/basic-form',
-            //       component: './form/basic-form',
-            //     },
-            //     {
-            //       name: 'step-form',
-            //       icon: 'smile',
-            //       path: '/form/step-form',
-            //       component: './form/step-form',
-            //     },
-            //     {
-            //       name: 'advanced-form',
-            //       icon: 'smile',
-            //       path: '/form/advanced-form',
-            //       component: './form/advanced-form',
-            //     },
-            //   ],
-            // },
+
             {
               path: '/list',
               icon: 'table',
@@ -148,55 +120,11 @@ export default defineConfig({
                     // },
                   ],
                 },
-                // {
-                //   path: '/',
-                //   redirect: '/list/table-list',
-                // },
-                // {
-                //   name: 'table-list',
-                //   icon: 'smile',
-                //   path: '/list/table-list',
-                //   component: './list/table-list',
-                // },
-                // {
-                //   name: 'basic-list',
-                //   icon: 'smile',
-                //   path: '/list/basic-list',
-                //   component: './list/basic-list',
-                // },
-                // {
-                //   name: 'card-list',
-                //   icon: 'smile',
-                //   path: '/list/card-list',
-                //   component: './list/card-list',
-                // },
               ],
             },
-            // {
-            //   path: '/profile',
-            //   name: 'profile',
-            //   icon: 'profile',
-            //   routes: [
-            //     {
-            //       path: '/',
-            //       redirect: '/profile/basic',
-            //     },
-            //     {
-            //       name: 'basic',
-            //       icon: 'smile',
-            //       path: '/profile/basic',
-            //       component: './profile/basic',
-            //     },
-            //     {
-            //       name: 'advanced',
-            //       icon: 'smile',
-            //       path: '/profile/advanced',
-            //       component: './profile/advanced',
-            //     },
-            //   ],
-            // },
+
             {
-              name: 'result',
+              name: 'Kết quả',
               icon: 'CheckCircleOutlined',
               path: '/result',
               routes: [
@@ -205,13 +133,13 @@ export default defineConfig({
                   redirect: '/result/success',
                 },
                 {
-                  name: 'success',
+                  name: 'Thành công',
                   icon: 'smile',
                   path: '/result/success',
                   component: './result/success',
                 },
                 {
-                  name: 'fail',
+                  name: 'Thất bại',
                   icon: 'smile',
                   path: '/result/fail',
                   component: './result/fail',
@@ -219,7 +147,7 @@ export default defineConfig({
               ],
             },
             {
-              name: 'exception',
+              name: 'Cảnh báo',
               icon: 'warning',
               path: '/exception',
               routes: [
@@ -271,7 +199,7 @@ export default defineConfig({
               ],
             },
             {
-              name: 'editor',
+              name: 'Thiết kế',
               icon: 'highlight',
               path: '/editor',
               routes: [
@@ -280,19 +208,19 @@ export default defineConfig({
                   redirect: '/editor/flow',
                 },
                 {
-                  name: 'flow',
+                  name: 'Luồng hoạt động',
                   icon: 'smile',
                   path: '/editor/flow',
                   component: './editor/flow',
                 },
                 {
-                  name: 'mind',
+                  name: 'Cuộc thi',
                   icon: 'smile',
                   path: '/editor/mind',
                   component: './editor/mind',
                 },
                 {
-                  name: 'koni',
+                  name: 'Koni',
                   icon: 'smile',
                   path: '/editor/koni',
                   component: './editor/koni',

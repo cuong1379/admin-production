@@ -44,11 +44,35 @@ const Articles = ({ dispatch, listAndsearchAndarticles: { list }, loading }) => 
       title: 'Số điện thoại',
       dataIndex: 'phone',
       key: 'phone',
+      render: (phone) => <p style={{ color: 'red' }}>0{phone}</p>,
     },
     {
       title: 'Ngày đặt bàn',
       dataIndex: 'date',
       key: 'date',
+      render: (date) => <p>{date.substr(0, 10)}</p>,
+    },
+    {
+      title: 'Giờ đặt',
+      dataIndex: 'time',
+      key: 'time',
+      render: (time) => {
+        let h = time.substring(11, 13);
+        let m = time.substring(14, 16);
+        let s = time.substring(17, 19);
+        let hour = Number(h);
+        let hourReal;
+        if (hour + 7 <= 24) {
+          hourReal = hour + 7;
+        } else {
+          hourReal = hour + 7 - 24;
+        }
+        return (
+          <Tag color="green">
+            {hourReal}:{m}:{s}
+          </Tag>
+        );
+      },
     },
     {
       title: 'Số người',
