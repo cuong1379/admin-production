@@ -100,9 +100,9 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
               <div style={{ fontSize: '20px', fontWeight: '15px' }}>
                 Giá: {new Intl.NumberFormat().format(item.price)} VNĐ
               </div>
-              <div style={{ fontWeight: '15px' }}>
+              {/* <div style={{ fontWeight: '15px' }}>
                 Số lượng: {new Intl.NumberFormat().format(item.quantity)}
-              </div>
+              </div> */}
               {/* <div className={styles.avatarList}>
                 <AvatarList size="small">
                   {item.members.map((member, i) => (
@@ -311,13 +311,13 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
             <Input />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             name={['quantity']}
             label="Số lượng"
             rules={[{ type: 'number', min: 0, max: 1000 }]}
           >
             <InputNumber />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             name={['price']}
             label="Giá tiền"
@@ -356,13 +356,13 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
             <Input />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             name={['quantity']}
             label="Số lượng"
             rules={[{ type: 'number', min: 0, max: 1000 }]}
           >
             <InputNumber />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             name={['price']}
             label="Giá tiền"
