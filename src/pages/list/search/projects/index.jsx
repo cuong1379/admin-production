@@ -15,8 +15,6 @@ import {
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
-import moment from 'moment';
-import AvatarList from './components/AvatarList';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import styles from './style.less';
@@ -32,6 +30,14 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
   const [isModalVisibleUpdate, setIsModalVisibleUpdate] = useState(false);
 
   const [currentId, setCurrentId] = useState();
+  const [currentInfoProduct, setCurrentInfoProduct] = useState({
+    name: '',
+    price: '',
+    category: '',
+    thumbnail: '',
+    description: '',
+  });
+
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -42,6 +48,14 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
       },
     });
   }, []);
+
+  const onSearch = (val) => {
+    console.log('search:', val);
+  };
+
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+  };
 
   const cardList = list && (
     <List
@@ -62,13 +76,13 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
           <Card
             className={styles.card}
             hoverable
-            cover={<img alt={item.name} src={item.thumbnail} />}
+            cover={<img style={{ height: '250px' }} alt={item.name} src={item.thumbnail} />}
           >
             <Card.Meta
               title={
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <a>{item.name}</a>
-                  <a onClick={() => handleUpdateProduct(item._id)} style={{ color: 'red' }}>
+                  <a onClick={() => handleOpenModalUpdate(item._id)} style={{ color: 'red' }}>
                     Chi tiết
                   </a>
                 </div>
@@ -148,9 +162,20 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
     setIsModalVisibleAdd(false);
   };
 
-  const handleUpdateProduct = (id) => {
-    setIsModalVisibleUpdate(true);
+  const handleOpenModalUpdate = async (id) => {
+    console.log('day la id', id);
+
     setCurrentId(id);
+
+    try {
+      const res = await axios.get(`http://localhost:5555/productions/${id}`);
+      setCurrentInfoProduct(res.data.production);
+      console.log(res.data.production);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setIsModalVisibleUpdate(true);
   };
 
   const handleCancelUpdate = () => {
@@ -311,19 +336,34 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
             <Input />
           </Form.Item>
 
-          {/* <Form.Item
-            name={['quantity']}
-            label="Số lượng"
-            rules={[{ type: 'number', min: 0, max: 1000 }]}
-          >
-            <InputNumber />
-          </Form.Item> */}
           <Form.Item
             name={['price']}
             label="Giá tiền"
             rules={[{ type: 'number', min: 0, max: 100000000 }]}
           >
             <InputNumber />
+          </Form.Item>
+
+          <Form.Item
+            name={['category']}
+            label="Loại"
+            // initialValue={ currentInfoProduct.price}
+          >
+            <Select
+              showSearch
+              style={{ width: '100%' }}
+              placeholder="Chọn loại đồ ăn"
+              optionFilterProp="children"
+              onChange={onChange}
+              onSearch={onSearch}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              <Option value="breakfast">Bữa sáng</Option>
+              <Option value="dimsum">Dimsum</Option>
+              <Option value="hotpot">Lẩu</Option>
+            </Select>
           </Form.Item>
           <Form.Item name={['thumbnail']} label="Hình ảnh" rules={[{ required: true }]}>
             <Input />
@@ -352,28 +392,59 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
           onFinish={onFinishUpdate}
           validateMessages={validateMessages}
         >
-          <Form.Item name={['name']} label="Tên sản phẩm" rules={[{ required: true }]}>
+          <Form.Item
+            name={['name']}
+            label="Tên sản phẩm"
+            rules={[{ required: true }]}
+            // initialValue={currentInfoProduct.name}
+          >
             <Input />
           </Form.Item>
 
-          {/* <Form.Item
-            name={['quantity']}
-            label="Số lượng"
-            rules={[{ type: 'number', min: 0, max: 1000 }]}
-          >
-            <InputNumber />
-          </Form.Item> */}
           <Form.Item
             name={['price']}
             label="Giá tiền"
             rules={[{ type: 'number', min: 0, max: 100000000 }]}
+            // initialValue={currentInfoProduct.price}
           >
             <InputNumber />
           </Form.Item>
-          <Form.Item name={['thumbnail']} label="Hình ảnh" rules={[{ required: true }]}>
+
+          <Form.Item
+            name={['category']}
+            label="Loại"
+            // initialValue={ currentInfoProduct.price}
+          >
+            <Select
+              showSearch
+              style={{ width: '100%' }}
+              placeholder="Chọn loại đồ ăn"
+              optionFilterProp="children"
+              onChange={onChange}
+              onSearch={onSearch}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              <Option value="breakfast">Bữa sáng</Option>
+              <Option value="dimsum">Dimsum</Option>
+              <Option value="hotpot">Lẩu</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name={['thumbnail']}
+            label="Hình ảnh"
+            rules={[{ required: true }]}
+            // initialValue={currentInfoProduct.thumbnail}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name={['description']} label="Mô tả sản phẩm">
+          <Form.Item
+            name={['description']}
+            label="Mô tả sản phẩm"
+            // initialValue={currentInfoProduct.description}
+          >
             <Input.TextArea />
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>

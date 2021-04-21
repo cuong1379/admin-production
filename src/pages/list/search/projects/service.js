@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 export async function queryListProduct(params) {
-  return request('http://localhost:5555/productions', {
+  return request('http://localhost:5555/productions?page=1&limit=12', {
     params,
   });
 }
