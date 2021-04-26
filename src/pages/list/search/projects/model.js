@@ -1,4 +1,4 @@
-import { queryListProduct, addProduct, updateProduct,deleteProduct } from'./service';
+import { queryListProduct, addProduct, updateProduct, deleteProduct } from './service';
 const Model = {
   namespace: 'listAndsearchAndprojects',
   state: {
@@ -6,6 +6,7 @@ const Model = {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
+      console.log('hehehehe', payload);
       const response = yield call(queryListProduct, payload);
       yield put({
         type: 'queryList',
@@ -14,15 +15,14 @@ const Model = {
     },
     *createProduct({ payload }, { call, put }) {
       const response = yield call(addProduct, payload.values);
-      
     },
     *updateProduct({ payload }, { call, put }) {
       const response = yield call(updateProduct, payload.currentId, payload.values);
     },
-    *deleteProduct( {payload} , { call, put }) {
-      console.log('dayla payload xoa:',payload.id)
+    *deleteProduct({ payload }, { call, put }) {
+      console.log('dayla payload xoa:', payload.id);
       const response = yield call(deleteProduct, payload.id);
-      console.log('day la respon xoa',response)
+      console.log('day la respon xoa', response);
     },
   },
   reducers: {
@@ -30,6 +30,5 @@ const Model = {
       return { ...state, list: action.payload };
     },
   },
-
 };
 export default Model;

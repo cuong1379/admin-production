@@ -88,7 +88,7 @@ export default {
     const { password, userName, type } = req.body;
     await waitTime(2000);
 
-    if (password === 'cuong' && userName === 'cuong') {
+    if (password === '123456' && userName === 'cuong') {
       res.send({
         status: 'ok',
         type,

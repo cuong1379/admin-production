@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Input } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import { history } from 'umi';
+import axios from 'axios';
+import { connect } from 'umi';
 
-class Search extends Component {
+const Search = ({ dispatch, children }) => {
+  const [searchData, setSearchData] = useState([]);
   // handleTabChange = (key) => {
   //   const { match } = this.props;
   //   const url = match.url === '/' ? '' : match.url;
@@ -25,9 +28,21 @@ class Search extends Component {
   //       break;
   //   }
   // };
-  handleFormSubmit = (value) => {
-    // eslint-disable-next-line no-console
-    console.log(value);
+  const handleFormSubmit = async (value) => {
+    dispatch({
+      type: 'listAndsearchAndprojects/fetch',
+      payload: {
+        q: value,
+      },
+    });
+
+    // try {
+    //   const res = await axios.get(`http://localhost:5555/productions?q=${value}`);
+    //   console.log(res.data);
+    //   setSearchData(res.data.production);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
   // getTabKey = () => {
   //   const { match, location } = this.props;
@@ -41,51 +56,53 @@ class Search extends Component {
   //   return 'articles';
   // };
 
-  render() {
-    // const tabList = [
-    //   {
-    //     key: 'articles',
-    //     tab: '文章',
-    //   },
-    //   {
-    //     key: 'projects',
-    //     tab: '项目',
-    //   },
-    //   {
-    //     key: 'applications',
-    //     tab: '应用',
-    //   },
-    // ];
-    const mainSearch = (
-      <div
+  // const tabList = [
+  //   {
+  //     key: 'articles',
+  //     tab: '文章',
+  //   },
+  //   {
+  //     key: 'projects',
+  //     tab: '项目',
+  //   },
+  //   {
+  //     key: 'applications',
+  //     tab: '应用',
+  //   },
+  // ];
+  const mainSearch = (
+    <div
+      style={{
+        textAlign: 'center',
+      }}
+    >
+      <Input.Search
+        placeholder="Tìm kiếm gì đó?"
+        enterButton="Tìm kiếm"
+        size="large"
+        onSearch={handleFormSubmit}
         style={{
-          textAlign: 'center',
+          maxWidth: 522,
+          width: '100%',
         }}
-      >
-        <Input.Search
-          placeholder="Tìm kiếm gì đó?"
-          enterButton="Tìm kiếm"
-          size="large"
-          onSearch={this.handleFormSubmit}
-          style={{
-            maxWidth: 522,
-            width: '100%',
-          }}
-        />
-      </div>
-    );
-    const { children } = this.props;
-    return (
-      <PageContainer
-        content={mainSearch}
-        // tabList={tabList}
-        // tabActiveKey={this.getTabKey()}
-        // onTabChange={this.handleTabChange}
-      >
-        {children}
-      </PageContainer>
-    );
-  }
-}
+      />
+    </div>
+  );
 
-export default Search;
+  return (
+    <PageContainer
+      searchValue={searchData}
+      content={mainSearch}
+      // tabList={tabList}
+      // tabActiveKey={this.getTabKey()}
+      // onTabChange={this.handleTabChange}
+    >
+      {children}
+    </PageContainer>
+  );
+};
+
+export default connect(({ listAndsearchAndprojects, loading }) => ({
+  listAndsearchAndprojects,
+  loading: loading.models.listAndsearchAndprojects,
+}))(Search);
