@@ -7,31 +7,17 @@ import axios from 'axios';
 
 const { Option } = Select;
 const FormItem = Form.Item;
-const pageSize = 5;
 
-const Articles = ({ dispatch, listAndsearchAndarticles: { list }, loading }) => {
-  const [listCustomer, setListCustomer] = useState([]);
+const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }) => {
   const [form] = Form.useForm();
   useEffect(() => {
-    // dispatch({
-    //   type: 'listAndsearchAndarticles/fetch',
-    //   payload: {
-    //     count: 5,
-    //   },
-    // });
-
-    getCustomer();
+    dispatch({
+      type: 'listAndsearchAndArticles/fetch',
+      payload: {
+        count: 12,
+      },
+    });
   }, []);
-
-  const getCustomer = async () => {
-    try {
-      const res = await axios.get('http://localhost:5555/customers');
-      console.log(res.data);
-      setListCustomer(res.data.customer);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const columns = [
     {
@@ -207,13 +193,13 @@ const Articles = ({ dispatch, listAndsearchAndarticles: { list }, loading }) => 
           padding: '8px 32px 32px 32px',
         }}
       >
-        <Table columns={columns} dataSource={listCustomer} />
+        <Table columns={columns} dataSource={list} />
       </Card>
     </>
   );
 };
 
-export default connect(({ listAndsearchAndarticles, loading }) => ({
-  listAndsearchAndarticles,
-  loading: loading.models.listAndsearchAndarticles,
+export default connect(({ listAndsearchAndArticles, loading }) => ({
+  listAndsearchAndArticles,
+  loading: loading.models.listAndsearchAndArticles,
 }))(Articles);

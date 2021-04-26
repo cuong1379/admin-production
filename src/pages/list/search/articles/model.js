@@ -1,33 +1,33 @@
-import { queryFakeList } from './service';
+import { queryListCustomer, addCustomer, updateCustomer, deleteCustomer } from './service';
 const Model = {
-  namespace: 'listAndsearchAndarticles',
+  namespace: 'listAndsearchAndArticles',
   state: {
     list: [],
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
+      console.log('ádasdasd', payload);
+      const response = yield call(queryListCustomer, payload);
       yield put({
         type: 'queryList',
-        payload: Array.isArray(response) ? response : [],
+        payload: Array.isArray(response.customer) ? response.customer : [],
       });
     },
-
-    *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
-      yield put({
-        type: 'appendList',
-        payload: Array.isArray(response) ? response : [],
-      });
+    *createCustomer({ payload }, { call, put }) {
+      const response = yield call(addCustomer, payload.values);
+    },
+    *updateCustomer({ payload }, { call, put }) {
+      const response = yield call(updateCustomer, payload.currentId, payload.values);
+    },
+    *deleteCustomer({ payload }, { call, put }) {
+      console.log('dayla payload xoa:', payload.id);
+      const response = yield call(deleteCustomer, payload.id);
+      console.log('day la respon xoa', response);
     },
   },
   reducers: {
     queryList(state, action) {
       return { ...state, list: action.payload };
-    },
-
-    appendList(state, action) {
-      return { ...state, list: state.list.concat(action.payload) };
     },
   },
 };

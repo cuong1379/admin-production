@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { Input } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import { history } from 'umi';
@@ -6,28 +6,6 @@ import axios from 'axios';
 import { connect } from 'umi';
 
 const Search = ({ dispatch, children }) => {
-  const [searchData, setSearchData] = useState([]);
-  // handleTabChange = (key) => {
-  //   const { match } = this.props;
-  //   const url = match.url === '/' ? '' : match.url;
-
-  //   switch (key) {
-  //     case 'articles':
-  //       history.push(`${url}/articles`);
-  //       break;
-
-  //     case 'applications':
-  //       history.push(`${url}/applications`);
-  //       break;
-
-  //     case 'projects':
-  //       history.push(`${url}/projects`);
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-  // };
   const handleFormSubmit = async (value) => {
     dispatch({
       type: 'listAndsearchAndprojects/fetch',
@@ -36,40 +14,14 @@ const Search = ({ dispatch, children }) => {
       },
     });
 
-    // try {
-    //   const res = await axios.get(`http://localhost:5555/productions?q=${value}`);
-    //   console.log(res.data);
-    //   setSearchData(res.data.production);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    dispatch({
+      type: 'listAndsearchAndArticles/fetch',
+      payload: {
+        q: value,
+      },
+    });
   };
-  // getTabKey = () => {
-  //   const { match, location } = this.props;
-  //   const url = match.path === '/' ? '' : match.path;
-  //   const tabKey = location.pathname.replace(`${url}/`, '');
 
-  //   if (tabKey && tabKey !== '/') {
-  //     return tabKey;
-  //   }
-
-  //   return 'articles';
-  // };
-
-  // const tabList = [
-  //   {
-  //     key: 'articles',
-  //     tab: '文章',
-  //   },
-  //   {
-  //     key: 'projects',
-  //     tab: '项目',
-  //   },
-  //   {
-  //     key: 'applications',
-  //     tab: '应用',
-  //   },
-  // ];
   const mainSearch = (
     <div
       style={{
@@ -91,7 +43,6 @@ const Search = ({ dispatch, children }) => {
 
   return (
     <PageContainer
-      searchValue={searchData}
       content={mainSearch}
       // tabList={tabList}
       // tabActiveKey={this.getTabKey()}
