@@ -128,20 +128,6 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
               <div style={{ fontSize: '20px', fontWeight: '15px' }}>
                 Giá: {new Intl.NumberFormat().format(item.price)} VNĐ
               </div>
-              {/* <div style={{ fontWeight: '15px' }}>
-                Số lượng: {new Intl.NumberFormat().format(item.quantity)}
-              </div> */}
-              {/* <div className={styles.avatarList}>
-                <AvatarList size="small">
-                  {item.members.map((member, i) => (
-                    <AvatarList.Item
-                      key={getKey(item.id, i)}
-                      src={member.avatar}
-                      tips={member.name}
-                    />
-                  ))}
-                </AvatarList>
-              </div> */}
             </div>
           </Card>
         </List.Item>
@@ -266,11 +252,12 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
       <Card bordered={false}>
         <Form
           layout="inline"
-          onValuesChange={() => {
+          onValuesChange={(value) => {
+            console.log(value.category[0]);
             dispatch({
               type: 'listAndsearchAndprojects/fetch',
               payload: {
-                count: 8,
+                category: value.category[0],
               },
             });
           }}
@@ -284,11 +271,9 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
           >
             <FormItem name="category">
               <TagSelect expandable>
-                <TagSelect.Option value="cat1">Hải sản</TagSelect.Option>
-                <TagSelect.Option value="cat2">Đồ chiên</TagSelect.Option>
-                <TagSelect.Option value="cat3">Đồ ăn nhanh</TagSelect.Option>
-                <TagSelect.Option value="cat4">Bia</TagSelect.Option>
-                <TagSelect.Option value="cat5">Đặc sản</TagSelect.Option>
+                <TagSelect.Option value="breakfast">Bữa sáng</TagSelect.Option>
+                <TagSelect.Option value="dimsum">Dimsum</TagSelect.Option>
+                <TagSelect.Option value="hotpot">Món lẩu</TagSelect.Option>
               </TagSelect>
             </FormItem>
           </StandardFormRow>
