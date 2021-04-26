@@ -1,15 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Form, List, Row, Select, Tag, Table, Space } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Drawer,
+  Row,
+  Select,
+  Tag,
+  Table,
+  Space,
+  Input,
+  DatePicker,
+  TimePicker,
+} from 'antd';
 import { connect } from 'umi';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
-import axios from 'axios';
 
 const { Option } = Select;
 const FormItem = Form.Item;
+import moment from 'moment';
 
 const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }) => {
+  const [visible, setVisible] = useState(false);
+  const [curentId, setCurentId] = useState();
   const [form] = Form.useForm();
+  const format = 'HH:mm';
   useEffect(() => {
     dispatch({
       type: 'listAndsearchAndArticles/fetch',
@@ -18,6 +35,15 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
       },
     });
   }, []);
+
+  const showDrawer = (id) => {
+    setCurentId(id);
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
 
   const columns = [
     {
@@ -70,32 +96,13 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
       dataIndex: 'content',
       key: 'content',
     },
-    // {
-    //   title: 'Số người',
-    //   key: 'count',
-    //   dataIndex: 'count',
-    //   render: (count) => (
-    //     <>
-    //       {count.map((tag) => {
-    //         if (tag >= 9) {
-    //           color = 'volcano';
-    //         } else if (tag >= 6 && tag <= 8) color = 'yellow';
-    //         else color = 'green';
-    //         return (
-    //           <Tag color={color} key={tag}>
-    //             {tag.toUpperCase()}
-    //           </Tag>
-    //         );
-    //       })}
-    //     </>
-    //   ),
-    // },
+
     {
       title: 'Hành động',
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a>Sửa</a>
+          <a onClick={() => showDrawer(record._id)}>Sửa</a>
           <a>Xóa</a>
         </Space>
       ),
@@ -116,6 +123,37 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
     },
   };
 
+  const layout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
+  };
+  const tailLayout = {
+    wrapperCol: {
+      offset: 8,
+      span: 16,
+    },
+  };
+
+  const onFinishUpdate = (values) => {
+    console.log('Success:', values);
+    console.log('day la id:', curentId);
+    dispatch({
+      type: 'listAndsearchAndArticles/updateCustomer',
+      payload: {
+        id: curentId,
+        values,
+      },
+    });
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
   return (
     <>
       <Card bordered={false}>
@@ -127,7 +165,7 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
           }}
           onValuesChange={() => {
             dispatch({
-              type: 'listAndsearchAndarticles/fetch',
+              type: 'listAndsearchAndArticles/fetch',
               payload: {
                 count: 8,
               },
@@ -195,6 +233,92 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
       >
         <Table columns={columns} dataSource={list} />
       </Card>
+      <Drawer title="Thông tin khách hàng" onClose={onClose} visible={visible} width="350px">
+        <Form
+          {...layout}
+          name="basic"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinishUpdate}
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item
+            label="Họ tên"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập tên!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Số điện thoại"
+            name="phone"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập số điện thoại!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Ngày đặt bàn"
+            name="date"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập ngày đặt!',
+              },
+            ]}
+          >
+            <DatePicker placeholder="mm/dd/yy" />
+          </Form.Item>
+
+          <Form.Item
+            label="Giờ đặt"
+            name="time"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập giờ đặt!',
+              },
+            ]}
+          >
+            <TimePicker defaultValue={moment('17:45', format)} format={format} />
+          </Form.Item>
+
+          <Form.Item
+            label="Số người"
+            name="count"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập số người!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="Lời nhắn" name="content">
+            <Input />
+          </Form.Item>
+
+          <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit">
+              Cập nhật
+            </Button>
+          </Form.Item>
+        </Form>
+      </Drawer>
     </>
   );
 };

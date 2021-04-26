@@ -247,6 +247,10 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
     });
   };
 
+  const autofillUpdate = async () => {
+    return await currentInfoProduct.name;
+  };
+
   return (
     <div className={styles.coverCardList}>
       <Card bordered={false}>
@@ -398,7 +402,7 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
             name={['name']}
             label="Tên sản phẩm"
             rules={[{ required: true }]}
-            // initialValue={currentInfoProduct.name}
+            initialValue={autofillUpdate}
           >
             <Input />
           </Form.Item>

@@ -17,7 +17,8 @@ const Model = {
       const response = yield call(addCustomer, payload.values);
     },
     *updateCustomer({ payload }, { call, put }) {
-      const response = yield call(updateCustomer, payload.currentId, payload.values);
+      console.log('hehahehah', payload.id, payload.values);
+      const response = yield call(updateCustomer, payload.id, payload.values);
     },
     *deleteCustomer({ payload }, { call, put }) {
       console.log('dayla payload xoa:', payload.id);
