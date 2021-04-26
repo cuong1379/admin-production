@@ -12,10 +12,12 @@ import {
   Input,
   Popconfirm,
   message,
+  Upload,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
 import StandardFormRow from './components/StandardFormRow';
+import { UploadOutlined } from '@ant-design/icons';
 import TagSelect from './components/TagSelect';
 import styles from './style.less';
 const { Option } = Select;
@@ -38,6 +40,8 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
     description: '',
   });
 
+  const [file, setFile] = useState();
+
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -49,12 +53,22 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
     });
   }, []);
 
-  const onSearch = (val) => {
-    console.log('search:', val);
-  };
-
-  const onChange = (value) => {
-    console.log(`selected ${value}`);
+  const handleUploadFile = (info) => {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+      setFile(info.file);
+      try {
+        const res = axios.post(`http://localhost:5555/productions/upload`, info.file);
+        console.log(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
   };
 
   const cardList = list && (
@@ -344,7 +358,7 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
             <InputNumber />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             name={['category']}
             label="Loại"
             // initialValue={ currentInfoProduct.price}
@@ -364,10 +378,13 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
               <Option value="dimsum">Dimsum</Option>
               <Option value="hotpot">Lẩu</Option>
             </Select>
-          </Form.Item>
-          <Form.Item name={['thumbnail']} label="Hình ảnh" rules={[{ required: true }]}>
+          </Form.Item> */}
+          {/* <Form.Item name={['thumbnail']} label="Hình ảnh" rules={[{ required: true }]}>
             <Input />
-          </Form.Item>
+          </Form.Item> */}
+          <Upload onChange={handleUploadFile}>
+            <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
+          </Upload>
           <Form.Item name={['description']} label="Mô tả sản phẩm">
             <Input.TextArea />
           </Form.Item>
@@ -410,7 +427,7 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
             <InputNumber />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             name={['category']}
             label="Loại"
             // initialValue={ currentInfoProduct.price}
@@ -430,12 +447,12 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
               <Option value="dimsum">Dimsum</Option>
               <Option value="hotpot">Lẩu</Option>
             </Select>
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             name={['thumbnail']}
             label="Hình ảnh"
-            rules={[{ required: true }]}
+
             // initialValue={currentInfoProduct.thumbnail}
           >
             <Input />
