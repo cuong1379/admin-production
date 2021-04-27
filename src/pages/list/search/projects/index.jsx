@@ -47,9 +47,6 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
   useEffect(() => {
     dispatch({
       type: 'listAndsearchAndprojects/fetch',
-      payload: {
-        count: 8,
-      },
     });
   }, []);
 

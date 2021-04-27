@@ -26,6 +26,7 @@ import moment from 'moment';
 
 const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }) => {
   const [visible, setVisible] = useState(false);
+  const [visibleAdd, setVisibleAdd] = useState(false);
   const [curentId, setCurentId] = useState();
   const [form] = Form.useForm();
   const format = 'HH:mm';
@@ -43,8 +44,16 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
     setVisible(true);
   };
 
+  const showDrawerAdd = () => {
+    setVisibleAdd(true);
+  };
+
   const onClose = () => {
     setVisible(false);
+  };
+
+  const onCloseAdd = () => {
+    setVisibleAdd(false);
   };
 
   const columns = [
@@ -187,6 +196,21 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
     });
   };
 
+  const onFinishAdd = async (values) => {
+    await dispatch({
+      type: 'listAndsearchAndArticles/createCustomer',
+      payload: {
+        values,
+      },
+    });
+
+    setVisibleAdd(false);
+
+    await dispatch({
+      type: 'listAndsearchAndArticles/fetch',
+    });
+  };
+
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
@@ -255,6 +279,13 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
                   </Select>
                 </FormItem>
               </Col>
+              <Col lg={8} md={4} sm={4} xs={24}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button type="primary" danger onClick={showDrawerAdd}>
+                    Tạo lịch đặt bàn
+                  </Button>
+                </div>
+              </Col>
             </Row>
           </StandardFormRow>
         </Form>
@@ -270,6 +301,94 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
       >
         <Table columns={columns} dataSource={list} />
       </Card>
+
+      <Drawer title="Thêm lịch đặt bàn" onClose={onCloseAdd} visible={visibleAdd} width="350px">
+        <Form
+          {...layout}
+          name="basic"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinishAdd}
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item
+            label="Họ tên"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập tên!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Số điện thoại"
+            name="phone"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập số điện thoại!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Ngày đặt bàn"
+            name="date"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập ngày đặt!',
+              },
+            ]}
+          >
+            <DatePicker placeholder="mm/dd/yy" />
+          </Form.Item>
+
+          <Form.Item
+            label="Giờ đặt"
+            name="time"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập giờ đặt!',
+              },
+            ]}
+          >
+            <TimePicker defaultValue={moment('17:45', format)} format={format} />
+          </Form.Item>
+
+          <Form.Item
+            label="Số người"
+            name="count"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập số người!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="Lời nhắn" name="content">
+            <Input />
+          </Form.Item>
+
+          <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit">
+              Thêm lịch
+            </Button>
+          </Form.Item>
+        </Form>
+      </Drawer>
+
       <Drawer title="Thông tin khách hàng" onClose={onClose} visible={visible} width="350px">
         <Form
           {...layout}
