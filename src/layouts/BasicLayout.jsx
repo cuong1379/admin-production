@@ -71,10 +71,11 @@ const BasicLayout = (props) => {
     },
   } = props;
   const menuDataRef = useRef([]);
+
   useEffect(() => {
     if (dispatch) {
       dispatch({
-        type: 'user/fetchCurrent',
+        type: 'user/fetchMe',
       });
     }
   }, []);
@@ -152,7 +153,7 @@ const BasicLayout = (props) => {
           {children}
         </Authorized>
       </ProLayout>
-      <SettingDrawer
+      {/* <SettingDrawer
         settings={settings}
         onSettingChange={(config) =>
           dispatch({
@@ -160,7 +161,7 @@ const BasicLayout = (props) => {
             payload: config,
           })
         }
-      />
+      /> */}
     </>
   );
 };

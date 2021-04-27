@@ -32,9 +32,10 @@ const Login = (props) => {
   const intl = useIntl();
 
   const handleSubmit = (values) => {
+    console.log('dqw', values);
     const { dispatch } = props;
     dispatch({
-      type: 'login/login',
+      type: 'auth/login',
       payload: { ...values, type },
     });
   };
@@ -88,20 +89,17 @@ const Login = (props) => {
         {type === 'account' && (
           <>
             <ProFormText
-              name="userName"
+              name="username"
               fieldProps={{
                 size: 'large',
                 prefix: <UserOutlined className={styles.prefixIcon} />,
               }}
-              placeholder='Tên đăng nhập'
+              placeholder="Tên đăng nhập"
               rules={[
                 {
                   required: true,
                   message: (
-                    <FormattedMessage
-                      id="pages.login.username.required"
-                      defaultMessage=""
-                    />
+                    <FormattedMessage id="pages.login.username.required" defaultMessage="" />
                   ),
                 },
               ]}
@@ -112,15 +110,12 @@ const Login = (props) => {
                 size: 'large',
                 prefix: <LockOutlined className={styles.prefixIcon} />,
               }}
-              placeholder='Mật khẩu'
+              placeholder="Mật khẩu"
               rules={[
                 {
                   required: true,
                   message: (
-                    <FormattedMessage
-                      id="pages.login.password.required"
-                      defaultMessage=""
-                    />
+                    <FormattedMessage id="pages.login.password.required" defaultMessage="" />
                   ),
                 },
               ]}
@@ -128,9 +123,7 @@ const Login = (props) => {
           </>
         )}
 
-        {status === 'error' && loginType === 'mobile' && !submitting && (
-          <LoginMessage content="" />
-        )}
+        {status === 'error' && loginType === 'mobile' && !submitting && <LoginMessage content="" />}
         {type === 'mobile' && (
           <>
             <ProFormText
@@ -147,19 +140,13 @@ const Login = (props) => {
                 {
                   required: true,
                   message: (
-                    <FormattedMessage
-                      id="pages.login.phoneNumber.required"
-                      defaultMessage=""
-                    />
+                    <FormattedMessage id="pages.login.phoneNumber.required" defaultMessage="" />
                   ),
                 },
                 {
                   pattern: /^1\d{10}$/,
                   message: (
-                    <FormattedMessage
-                      id="pages.login.phoneNumber.invalid"
-                      defaultMessage=""
-                    />
+                    <FormattedMessage id="pages.login.phoneNumber.invalid" defaultMessage="" />
                   ),
                 },
               ]}
@@ -193,12 +180,7 @@ const Login = (props) => {
               rules={[
                 {
                   required: true,
-                  message: (
-                    <FormattedMessage
-                      id="pages.login.captcha.required"
-                      defaultMessage=""
-                    />
-                  ),
+                  message: <FormattedMessage id="pages.login.captcha.required" defaultMessage="" />,
                 },
               ]}
               onGetCaptcha={async (mobile) => {
