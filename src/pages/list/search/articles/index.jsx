@@ -13,6 +13,8 @@ import {
   Input,
   DatePicker,
   TimePicker,
+  Popconfirm,
+  message,
 } from 'antd';
 import { connect } from 'umi';
 import StandardFormRow from './components/StandardFormRow';
@@ -103,7 +105,15 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
       render: (text, record) => (
         <Space size="middle">
           <a onClick={() => showDrawer(record._id)}>Sửa</a>
-          <a>Xóa</a>
+          <Popconfirm
+            title="Bạn có chắc muốn xóa lịch đặt bàn này?"
+            onConfirm={() => confirm(record._id)}
+            onCancel={cancel}
+            okText="Xóa"
+            cancelText="Hủy"
+          >
+            <a>Xóa</a>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -138,15 +148,42 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
     },
   };
 
-  const onFinishUpdate = (values) => {
+  const confirm = async (id) => {
+    console.log(id);
+
+    await dispatch({
+      type: 'listAndsearchAndArticles/deleteCustomer',
+      payload: {
+        id,
+      },
+    });
+
+    dispatch({
+      type: 'listAndsearchAndArticles/fetch',
+    });
+
+    message.success('Xóa thành công');
+  };
+
+  const cancel = () => {
+    message.error('Bạn chưa xóa');
+  };
+
+  const onFinishUpdate = async (values) => {
     console.log('Success:', values);
     console.log('day la id:', curentId);
-    dispatch({
+    await dispatch({
       type: 'listAndsearchAndArticles/updateCustomer',
       payload: {
         id: curentId,
         values,
       },
+    });
+
+    setVisible(false);
+
+    dispatch({
+      type: 'listAndsearchAndArticles/fetch',
     });
   };
 

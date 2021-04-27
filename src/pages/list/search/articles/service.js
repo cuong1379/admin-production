@@ -17,7 +17,6 @@ export async function updateCustomer(id, params) {
   });
 }
 export async function deleteCustomer(id) {
-  console.log('day la id o servee :', id);
   return request(`http://localhost:5555/customers/${id}`, {
     method: 'DELETE',
   });
