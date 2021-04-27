@@ -1,4 +1,5 @@
 import { queryListProduct, addProduct, updateProduct, deleteProduct } from './service';
+import axios from 'axios';
 const Model = {
   namespace: 'listAndsearchAndprojects',
   state: {

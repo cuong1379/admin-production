@@ -254,13 +254,25 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
         <Form
           layout="inline"
           onValuesChange={(value) => {
-            console.log(value.category[0]);
-            dispatch({
-              type: 'listAndsearchAndprojects/fetch',
-              payload: {
-                category: value.category[0],
-              },
-            });
+            if (value.category && value.category.length === 3) {
+              dispatch({
+                type: 'listAndsearchAndprojects/fetch',
+              });
+            } else if (value.category) {
+              dispatch({
+                type: 'listAndsearchAndprojects/fetch',
+                payload: {
+                  category: value.category[0],
+                },
+              });
+            } else {
+              dispatch({
+                type: 'listAndsearchAndprojects/fetch',
+                payload: {
+                  price: `price:${value.price}`,
+                },
+              });
+            }
           }}
         >
           <StandardFormRow
@@ -281,7 +293,7 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
           <StandardFormRow title="Lọc" grid last>
             <Row gutter={16}>
               <Col lg={8} md={10} sm={10} xs={24}>
-                <FormItem {...formItemLayout} label="Theo giá" name="author">
+                <FormItem {...formItemLayout} label="Theo giá" name="price">
                   <Select
                     placeholder="Từ thấp đến cao"
                     style={{
@@ -289,8 +301,8 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
                       width: '100%',
                     }}
                   >
-                    <Option value="lisa">Từ thấp đến cao</Option>
-                    <Option value="lisaa">Từ cao đến thấp</Option>
+                    <Option value="asc">Từ thấp đến cao</Option>
+                    <Option value="desc">Từ cao đến thấp</Option>
                   </Select>
                 </FormItem>
               </Col>

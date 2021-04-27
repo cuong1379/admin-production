@@ -6,7 +6,7 @@ const Model = {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryListCustomer, payload);
+      const response = yield call(queryListCustomer, payload.date);
       yield put({
         type: 'queryList',
         payload: Array.isArray(response.customer) ? response.customer : [],

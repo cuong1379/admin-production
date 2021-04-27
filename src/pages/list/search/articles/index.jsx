@@ -206,10 +206,28 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
 
     setVisibleAdd(false);
 
-    await dispatch({
+    dispatch({
       type: 'listAndsearchAndArticles/fetch',
     });
   };
+
+  // const SortNew = async () => {
+  //   await dispatch({
+  //     type: 'listAndsearchAndArticles/fetch',
+  //     payload: {
+  //       sortBy: 'createdAt:asc',
+  //     },
+  //   });
+  // };
+
+  // const SortOld = async () => {
+  //   await dispatch({
+  //     type: 'listAndsearchAndArticles/fetch',
+  //     payload: {
+  //       sortBy: 'createdAt:desc',
+  //     },
+  //   });
+  // };
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -224,11 +242,12 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
           initialValues={{
             owner: ['wjh', 'zxx'],
           }}
-          onValuesChange={() => {
+          onValuesChange={(value) => {
+            const a = value.date;
             dispatch({
               type: 'listAndsearchAndArticles/fetch',
               payload: {
-                count: 8,
+                date: `date:${a}`,
               },
             });
           }}
@@ -252,7 +271,7 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
           <StandardFormRow title="Lựa chọn khác" grid last>
             <Row gutter={16}>
               <Col xl={8} lg={10} md={12} sm={24} xs={24}>
-                <FormItem {...formItemLayout} label="Theo thời gian" name="user">
+                <FormItem {...formItemLayout} label="Theo thời gian" name="date">
                   <Select
                     placeholder="Mới nhất"
                     style={{
@@ -260,8 +279,8 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
                       width: '100%',
                     }}
                   >
-                    <Option value="lisa">Mới nhất</Option>
-                    <Option value="lisa">Muộn nhất</Option>
+                    <Option value="asc">Mới nhất</Option>
+                    <Option value="desc">Muộn nhất</Option>
                   </Select>
                 </FormItem>
               </Col>
