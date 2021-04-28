@@ -1,6 +1,12 @@
 import request from '@/utils/request';
 export async function queryListCustomer(params) {
-  return request(`http://localhost:5555/customers?page=1&limit=12&sortBy=${params}`);
+  // if (!params.date) {
+  return request(`http://localhost:5555/customers?page=1&limit=12`, {
+    params,
+  });
+  // } else {
+  //   return request(`http://localhost:5555/customers?page=1&limit=12&sortBy=${params.date}`);
+  // }
 }
 export async function addCustomer(params) {
   return request('http://localhost:5555/customers', {

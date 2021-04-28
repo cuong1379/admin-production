@@ -50,6 +50,26 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
     });
   }, []);
 
+  useEffect(() => {
+    form.setFieldsValue(currentInfoProduct);
+  }, [form, currentInfoProduct]);
+
+  const handleOpenModalUpdate = async (id) => {
+    console.log('day la id', id);
+
+    setCurrentId(id);
+
+    try {
+      const res = await axios.get(`http://localhost:5555/productions/${id}`);
+      setCurrentInfoProduct(res.data.production);
+      console.log(res.data.production);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setIsModalVisibleUpdate(true);
+  };
+
   const handleUploadFile = (info) => {
     if (info.file.status !== 'uploading') {
       console.log(info.file, info.fileList);
@@ -159,22 +179,6 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
     setIsModalVisibleAdd(false);
   };
 
-  const handleOpenModalUpdate = async (id) => {
-    console.log('day la id', id);
-
-    setCurrentId(id);
-
-    try {
-      const res = await axios.get(`http://localhost:5555/productions/${id}`);
-      setCurrentInfoProduct(res.data.production);
-      console.log(res.data.production);
-    } catch (error) {
-      console.log(error);
-    }
-
-    setIsModalVisibleUpdate(true);
-  };
-
   const handleCancelUpdate = () => {
     setIsModalVisibleUpdate(false);
   };
@@ -198,11 +202,8 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
       },
     });
     setIsModalVisibleAdd(false);
-    await dispatch({
+    dispatch({
       type: 'listAndsearchAndprojects/fetch',
-      payload: {
-        count: 8,
-      },
     });
   };
 
@@ -217,9 +218,6 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
     setIsModalVisibleUpdate(false);
     dispatch({
       type: 'listAndsearchAndprojects/fetch',
-      payload: {
-        count: 8,
-      },
     });
     form.resetFields();
   };
@@ -238,14 +236,7 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
 
     dispatch({
       type: 'listAndsearchAndprojects/fetch',
-      payload: {
-        count: 8,
-      },
     });
-  };
-
-  const autofillUpdate = async () => {
-    return await currentInfoProduct.name;
   };
 
   return (
@@ -406,13 +397,9 @@ const Projects = ({ dispatch, listAndsearchAndprojects: { list = [] }, loading }
           name="nest-messages"
           onFinish={onFinishUpdate}
           validateMessages={validateMessages}
+          initialValues={currentInfoProduct}
         >
-          <Form.Item
-            name={['name']}
-            label="Tên sản phẩm"
-            rules={[{ required: true }]}
-            initialValue={autofillUpdate}
-          >
+          <Form.Item name={['name']} label="Tên sản phẩm" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
 

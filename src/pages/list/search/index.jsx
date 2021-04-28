@@ -6,6 +6,7 @@ import axios from 'axios';
 import { connect } from 'umi';
 
 const Search = ({ dispatch, children }) => {
+  const [currentValueInput, setCurrentValueInput] = useState();
   const handleFormSubmit = async (value) => {
     dispatch({
       type: 'listAndsearchAndprojects/fetch',
@@ -20,6 +21,8 @@ const Search = ({ dispatch, children }) => {
         q: value,
       },
     });
+
+    setCurrentValueInput('');
   };
 
   const mainSearch = (
@@ -37,6 +40,7 @@ const Search = ({ dispatch, children }) => {
           maxWidth: 522,
           width: '100%',
         }}
+        value={currentValueInput}
       />
     </div>
   );

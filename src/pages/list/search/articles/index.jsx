@@ -19,6 +19,7 @@ import {
 import { connect } from 'umi';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
+import axios from 'axios';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -28,21 +29,39 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
   const [visible, setVisible] = useState(false);
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [curentId, setCurentId] = useState();
+  const [currentInfoCustomer, setCurrentInfoCustomer] = useState({
+    name: '',
+    phone: '',
+    date: '',
+    time: '',
+    count: '',
+    content: '',
+  });
   const [form] = Form.useForm();
   const format = 'HH:mm';
   useEffect(() => {
     dispatch({
       type: 'listAndsearchAndArticles/fetch',
-      payload: {
-        count: 12,
-      },
     });
   }, []);
 
-  const showDrawer = (id) => {
+  const showDrawer = async (id) => {
     setCurentId(id);
+
+    try {
+      const res = await axios.get(`http://localhost:5555/customers/${id}`);
+      setCurrentInfoCustomer(res.data.customer);
+      console.log('asd', res.data.customer);
+    } catch (error) {
+      console.log(error);
+    }
+
     setVisible(true);
   };
+
+  useEffect(() => {
+    form.setFieldsValue(currentInfoCustomer);
+  }, [form, currentInfoCustomer]);
 
   const showDrawerAdd = () => {
     setVisibleAdd(true);
@@ -211,24 +230,6 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
     });
   };
 
-  // const SortNew = async () => {
-  //   await dispatch({
-  //     type: 'listAndsearchAndArticles/fetch',
-  //     payload: {
-  //       sortBy: 'createdAt:asc',
-  //     },
-  //   });
-  // };
-
-  // const SortOld = async () => {
-  //   await dispatch({
-  //     type: 'listAndsearchAndArticles/fetch',
-  //     payload: {
-  //       sortBy: 'createdAt:desc',
-  //     },
-  //   });
-  // };
-
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
@@ -271,7 +272,7 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
           <StandardFormRow title="Lựa chọn khác" grid last>
             <Row gutter={16}>
               <Col xl={8} lg={10} md={12} sm={24} xs={24}>
-                <FormItem {...formItemLayout} label="Theo thời gian" name="date">
+                <FormItem {...formItemLayout} label="Theo thời gian" name="datee">
                   <Select
                     placeholder="Mới nhất"
                     style={{
@@ -412,11 +413,9 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
         <Form
           {...layout}
           name="basic"
-          initialValues={{
-            remember: true,
-          }}
           onFinish={onFinishUpdate}
           onFinishFailed={onFinishFailed}
+          initialValues={currentInfoCustomer}
         >
           <Form.Item
             label="Họ tên"
@@ -444,7 +443,7 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
             <Input />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             label="Ngày đặt bàn"
             name="date"
             rules={[
@@ -468,7 +467,7 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
             ]}
           >
             <TimePicker defaultValue={moment('17:45', format)} format={format} />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label="Số người"
