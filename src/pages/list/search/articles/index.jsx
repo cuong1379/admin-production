@@ -29,14 +29,14 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
   const [visible, setVisible] = useState(false);
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [curentId, setCurentId] = useState();
-  const [currentInfoCustomer, setCurrentInfoCustomer] = useState({
-    name: '',
-    phone: '',
-    date: '',
-    time: '',
-    count: '',
-    content: '',
-  });
+  // const [currentInfoCustomer, setCurrentInfoCustomer] = useState({
+  //   name: '',
+  //   phone: '',
+  //   date: '',
+  //   time: '',
+  //   count: '',
+  //   content: '',
+  // });
   const [form] = Form.useForm();
   const format = 'HH:mm';
   useEffect(() => {
@@ -45,23 +45,23 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
     });
   }, []);
 
-  const showDrawer = async (id) => {
+  const showDrawer = (id) => {
     setCurentId(id);
 
-    try {
-      const res = await axios.get(`http://localhost:5555/customers/${id}`);
-      setCurrentInfoCustomer(res.data.customer);
-      console.log('asd', res.data.customer);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const res = await axios.get(`http://localhost:5555/customers/${id}`);
+    //   setCurrentInfoCustomer(res.data.customer);
+    //   console.log('asd', res.data.customer);
+    // } catch (error) {
+    //   console.log(error);
+    // }
 
     setVisible(true);
   };
 
-  useEffect(() => {
-    form.setFieldsValue(currentInfoCustomer);
-  }, [form, currentInfoCustomer]);
+  // useEffect(() => {
+  //   form.setFieldsValue(currentInfoCustomer);
+  // }, [form, currentInfoCustomer]);
 
   const showDrawerAdd = () => {
     setVisibleAdd(true);
@@ -410,13 +410,7 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
       </Drawer>
 
       <Drawer title="Thông tin khách hàng" onClose={onClose} visible={visible} width="350px">
-        <Form
-          {...layout}
-          name="basic"
-          onFinish={onFinishUpdate}
-          onFinishFailed={onFinishFailed}
-          initialValues={currentInfoCustomer}
-        >
+        <Form {...layout} name="basic" onFinish={onFinishUpdate} onFinishFailed={onFinishFailed}>
           <Form.Item
             label="Họ tên"
             name="name"
@@ -443,7 +437,7 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
             <Input />
           </Form.Item>
 
-          {/* <Form.Item
+          <Form.Item
             label="Ngày đặt bàn"
             name="date"
             rules={[
@@ -467,7 +461,7 @@ const Articles = ({ dispatch, listAndsearchAndArticles: { list = [] }, loading }
             ]}
           >
             <TimePicker defaultValue={moment('17:45', format)} format={format} />
-          </Form.Item> */}
+          </Form.Item>
 
           <Form.Item
             label="Số người"
