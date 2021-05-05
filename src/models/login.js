@@ -50,7 +50,10 @@ const Model = {
     },
 
     *logout(_, { call, put }) {
+      console.log('asdasdasddddddddddddddddd');
+      localStorage.setItem('auth-firebase-token', '');
       yield call(setAuthority, '');
+
       yield put({
         type: 'changeToken',
         payload: null,

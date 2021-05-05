@@ -12,6 +12,7 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
+
 const noMatch = (
   <Result
     status={403}
@@ -73,10 +74,13 @@ const BasicLayout = (props) => {
   const menuDataRef = useRef([]);
 
   useEffect(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchMe',
-      });
+    // if (dispatch) {
+    //   dispatch({
+    //     type: 'user/fetchMe',
+    //   });
+    // }
+    if (!localStorage.getItem('auth-firebase-token')) {
+      history.push('/user/login');
     }
   }, []);
   /** Init variables */

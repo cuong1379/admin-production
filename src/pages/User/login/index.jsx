@@ -8,11 +8,13 @@ import {
   WeiboCircleOutlined,
 } from '@ant-design/icons';
 import { Alert, Space, message, Tabs } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
-import { useIntl, connect, FormattedMessage } from 'umi';
+import { useIntl, connect, FormattedMessage, history } from 'umi';
 import { getFakeCaptcha } from '@/services/login';
 import styles from './index.less';
+import firebase from 'firebase';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 const LoginMessage = ({ content }) => (
   <Alert
@@ -24,6 +26,20 @@ const LoginMessage = ({ content }) => (
     showIcon
   />
 );
+
+const config = {
+  apiKey: 'AIzaSyA_bsqOxDH_nuO_dptOQ2hTXGPKTBjQSi0',
+  authDomain: 'hainam-restaurant.firebaseapp.com',
+  // ...
+};
+firebase.initializeApp(config);
+
+const uiConfig = {
+  signInFlow: 'redirect',
+  signInSuccessUrl: '/',
+
+  signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+};
 
 const Login = (props) => {
   const { userLogin = {}, submitting } = props;
@@ -39,6 +55,23 @@ const Login = (props) => {
       payload: { ...values, type },
     });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('auth-firebase-token')) {
+      history.push('/');
+    }
+    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        console.log('khong co user');
+      } else {
+        console.log('logged in user', user.displayName);
+        const token = await user.getIdToken();
+        console.log('token firebase', token);
+        localStorage.setItem('auth-firebase-token', token);
+      }
+      return () => unregisterAuthObserver();
+    });
+  }, []);
 
   return (
     <div className={styles.main}>
@@ -212,12 +245,7 @@ const Login = (props) => {
           </a>
         </div>
       </ProForm>
-      {/* <Space className={styles.other}>
-        <FormattedMessage id="pages.login.loginWith" defaultMessage="其他登录方式" />
-        <AlipayCircleOutlined className={styles.icon} />
-        <TaobaoCircleOutlined className={styles.icon} />
-        <WeiboCircleOutlined className={styles.icon} />
-      </Space> */}
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
     </div>
   );
 };
